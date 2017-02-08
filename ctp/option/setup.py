@@ -4,13 +4,10 @@
 """
 import platform, os
 from distutils.core import setup, Extension
-from os.path import join
 
-headers = ['MdApi.h']
-sources = ['MdApi.cpp']
+headers = ['MdApi.h', 'TdApi.h']
+sources = ['MdApi.cpp', 'TdApi.cpp']
 
-sources = [join('.', file_path) for file_path in sources]
-depends = [join('.', file_path) for file_path in headers]
 
 pwd = os.getcwd()
 
@@ -27,22 +24,30 @@ if platform.system() == 'Windows':
     if '64 bit' in platform.python_compiler():
         optional['include_dirs'] = ['./api/win64']
         optional['library_dirs'] = ['./api/win64']
-argments = dict(name='heron_api',
-                sources=sources,
+
+argments_md = dict(name='MdApi',
+                sources=[pwd + '/MdApi.cpp'],
                 language='c++',
-                libraries=['boost_python', 'thostmduserapi', 'boost_thread'],
-                depends=depends)
-argments.update(optional)
+                libraries=['boost_python', 'boost_thread', 'thostmduserapi'],
+                depends=[pwd + '/MdApi.h'])
+argments_md.update(optional)
+
+argments_td = dict(name='TdApi',
+                   sources=[pwd + '/TdApi.cpp'],
+                   language='c++',
+                   libraries=['boost_python', 'boost_thread', 'thosttraderapi'],
+                   depends=[pwd + '/TdApi.h'])
+argments_td.update(optional)
 
 setup(name='heron_api',
       version='0.0.1',
       description='CTP for Python',
-      long_description='CTP v6.3.6_20160606 for Python',
+      long_description='CTP for Python',
       author='MeiQuant',
       author_email='xiuguozhao@gmail.com',
       url='https://github.com/MeiQuant/heron-api',
       keywords=['ctp','futures','stock'],
       license='LGPL-3.0',
       platforms=['linux-x86_64','win32','win-amd64'],
-      ext_modules=[Extension(**argments)]
+      ext_modules=[Extension(**argments_md), Extension(**argments_td)]
       )

@@ -6,7 +6,6 @@
 #include <queue>
 
 //Boost
-#define BOOST_PYTHON_STATIC_LIB
 //python封装
 #include <boost/python/module.hpp>
 #include <boost/python/def.hpp>
