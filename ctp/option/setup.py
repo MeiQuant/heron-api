@@ -2,22 +2,25 @@
 """
 
 """
-import platform
+import platform, os
 from distutils.core import setup, Extension
 from os.path import join
 
-headers = ['MdApi.h', 'TdApi.h']
-sources = ['MdApi.cpp', 'TdApi.cpp']
+headers = ['MdApi.h']
+sources = ['MdApi.cpp']
 
 sources = [join('.', file_path) for file_path in sources]
 depends = [join('.', file_path) for file_path in headers]
 
+pwd = os.getcwd()
+
 optional = {}
 if platform.system() == 'Linux':
     optional['extra_compile_args'] = ['-std=c++11']
-    optional['runtime_library_dirs'] = ['./']
-    optional['include_dirs'] = ['./api/linux64']
-    optional['library_dirs'] = ['./api/linux64', '/usr/lib/x86_64-linux-gnu']
+    # 这里最好使用绝对路径
+    optional['runtime_library_dirs'] = [pwd + '/api/linux64']
+    optional['include_dirs'] = [pwd + '/api/linux64', '/usr/include/boost']
+    optional['library_dirs'] = [pwd + '/api/linux64']
 if platform.system() == 'Windows':
     optional['include_dirs'] = ['./api/win32']
     optional['library_dirs'] = ['./api/win32']
@@ -27,7 +30,7 @@ if platform.system() == 'Windows':
 argments = dict(name='heron_api',
                 sources=sources,
                 language='c++',
-                libraries=['thostmduserapi', 'thosttraderapi'],
+                libraries=['boost_python', 'thostmduserapi', 'boost_thread'],
                 depends=depends)
 argments.update(optional)
 
