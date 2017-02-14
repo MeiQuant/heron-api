@@ -1,12 +1,10 @@
 # encoding: UTF-8
+#!/usr/bin/env python
 """
-
+安装CTP行情交易接口的Option版
 """
 import platform, os
 from distutils.core import setup, Extension
-
-headers = ['MdApi.h', 'TdApi.h']
-sources = ['MdApi.cpp', 'TdApi.cpp']
 
 
 pwd = os.getcwd()
@@ -49,5 +47,9 @@ setup(name='heron_api',
       keywords=['ctp','futures','stock'],
       license='LGPL-3.0',
       platforms=['linux-x86_64','win32','win-amd64'],
-      ext_modules=[Extension(**argments_md), Extension(**argments_td)]
+      ext_modules=[Extension(**argments_md), Extension(**argments_td)],
+      packages=['heron_api',
+                'heron_api.ctp',
+                'heron_api.ctp.option'
+                ]
       )
